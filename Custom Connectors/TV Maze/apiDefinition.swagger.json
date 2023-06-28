@@ -1,0 +1,452 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0",
+      "title": "TV Maze Connector",
+      "description": "Custom connector to get information about TV shows and movies using TV Maze API.",
+      "contact": {
+        "name": "Team Forward Forever",
+        "url": "https://www.forwardforever.com",
+        "email": "hello@forwardforever.com"
+      }
+    },
+    "host": "api.tvmaze.com",
+    "basePath": "/",
+    "schemes": ["https"],
+    "consumes": [],
+    "produces": [],
+    "paths": {
+        "/search/shows":{
+          "get": {
+            "description": "Search for a TV show or movie based on a keyword.",
+            "summary": "Search for TV shows on TVMaze",
+            "operationId": "SearchShow",
+            "parameters": [
+              {
+                "name": "q",
+                "in": "query",
+                "description": "keyword to search",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "A list of TV shows matching the search query",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Show"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/shows/{ShowId}":{
+          "get":{
+            "description": "Show details of a TV show or movie depending on its identifier.",
+            "summary": "Show details of a TV show or movie",
+            "operationId": "ShowDetails",
+            "parameters": [
+              {
+                "name": "ShowId",
+                "in": "path",
+                "description": "TV show or movie identifier",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "responses":{
+              "200": {
+                "description": "Details of a TV show or movie",
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/definitions/SingleShow"
+                  }
+                }
+              }
+            }
+            }
+          },
+        "/shows/{ShowId}/episodes":{
+          "get":{
+            "description": "Show a list of episodes for a specific TV show.",
+            "summary": "List of episodes of a TV show",
+            "operationId": "EpisodesList",
+            "parameters": [
+              {
+                "name": "ShowId",
+                "in": "path",
+                "description": "TV show identifier",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "A list of episodes matching the TV show identifier",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Episode"
+                  }
+                }
+              }
+            }
+          }
+          },
+        "/shows/{ShowId}/cast":{
+          "get":{
+            "description": "Show cast for a specific TV show or movie.",
+            "summary": "Cast of TV Show or movie",
+            "operationId": "Cast",
+            "parameters": [
+              {
+                "name": "ShowId",
+                "in": "path",
+                "description": "TV show or movie identifier",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Cast of the matching TV show or movie",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Cast"
+                  }
+                }
+              }
+            }
+          }
+          }
+    },
+    "definitions": {
+      "Show": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "The ID of the TV show"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the TV show"
+          },
+          "summary": {
+            "type": "string",
+            "description": "A brief summary of the TV show"
+          },
+          "image": {
+            "type": "object",
+            "properties": {
+              "medium": {
+                "type": "string",
+                "description": "URL of the medium-sized show image"
+              },
+              "original": {
+                "type": "string",
+                "description": "URL of the original-sized show image"
+              }
+            }
+          }
+        }
+      },
+      "Episode":{
+        "type":"object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "id"
+          },
+          "url": {
+            "type": "string",
+            "description": "url"
+          },
+          "name": {
+            "type": "string",
+            "description": "name"
+          },
+          "season": {
+            "type": "integer",
+            "format": "int32",
+            "description": "season"
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32",
+            "description": "number"
+          },
+          "type": {
+            "type": "string",
+            "description": "type"
+          },
+          "airdate": {
+            "type": "string",
+            "description": "airdate"
+          },
+          "airtime": {
+            "type": "string",
+            "description": "airtime"
+          },
+          "airstamp": {
+            "type": "string",
+            "description": "airstamp"
+          },
+          "runtime": {
+            "type": "integer",
+            "format": "int32",
+            "description": "runtime"
+          },
+          "rating": {
+            "type": "object",
+            "properties": {
+              "average": {
+                "type": "integer",
+                "format": "int32",
+                "description": "average",
+                "title": ""
+              }
+            },
+            "description": "rating"
+          },
+          "summary": {
+            "type": "string",
+            "description": "summary"
+          }
+        }
+      },
+      "Cast":{
+        "type":"object",
+        "properties": {
+          "person": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "url": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "country": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "code": {
+                    "type": "string"
+                  },
+                  "timezone": {
+                    "type": "string"
+                  }
+                }
+              },
+              "birthday": {
+                "type": "string"
+              },
+              "deathday": {
+                "type": "string"
+              },
+              "gender": {
+                "type": "string"
+              },
+              "image": {
+                "type": "object",
+                "properties": {
+                  "medium": {
+                    "type": "string"
+                  },
+                  "original": {
+                    "type": "string"
+                  }
+                }
+              },
+              "updated": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          "character": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "url": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "image": {
+                "type": "object",
+                "properties": {
+                  "medium": {
+                    "type": "string"
+                  },
+                  "original": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "SingleShow":{
+        "type": "object",
+        "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "url": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "language": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string"
+      },
+      "runtime": {
+        "type": "integer"
+      },
+      "averageRuntime": {
+        "type": "integer"
+      },
+      "premiered": {
+        "type": "string"
+      },
+      "ended": {
+        "type": "string"
+      },
+      "officialSite": {
+        "type": "string"
+      },
+      "schedule": {
+        "type": "object",
+        "properties": {
+          "time": {
+            "type": "string"
+          },
+          "days": {
+            "type": "array",
+            "items": [
+              {
+                "type": "string"
+              }
+            ]
+          }
+        }
+      },
+      "rating": {
+        "type": "object",
+        "properties": {
+          "average": {
+            "type": "number"
+          }
+        }
+      },
+      "weight": {
+        "type": "integer"
+      },
+      "network": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "country": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              },
+              "timezone": {
+                "type": "string"
+              }
+            }
+          },
+          "officialSite": {
+            "type": "string"
+          }
+        }
+      },
+      "externals": {
+        "type": "object",
+        "properties": {
+          "tvrage": {
+            "type": "integer"
+          },
+          "thetvdb": {
+            "type": "integer"
+          },
+          "imdb": {
+            "type": "string"
+          }
+        }
+      },
+      "image": {
+        "type": "object",
+        "properties": {
+          "medium": {
+            "type": "string"
+          },
+          "original": {
+            "type": "string"
+          }
+        }
+      },
+      "summary": {
+        "type": "string"
+      },
+      "updated": {
+        "type": "integer"
+      }
+        }
+      }
+    },
+    "parameters": {},
+    "responses": {},
+    "securityDefinitions": {},
+    "security": [],
+    "tags": [],
+    "x-ms-connector-metadata": [
+      {
+        "propertyName": "Website",
+        "propertyValue": "https://www.forwardforever.com"
+      },
+      {
+        "propertyName": "Privacy policy",
+        "propertyValue": "https://forwardforever.com/contact/"
+      },
+      {
+        "propertyName": "Categories",
+        "propertyValue": "Custom Connector, Entertainment"
+      }
+    ]
+  }
